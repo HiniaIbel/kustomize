@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: clinic-deploy
+spec:
+  replicas: 3
+  template:
+    spec:
+      containers:
+        - name: springboot
+          image: ghcr.io/HiniaIbel/spring-petclinic:latest
+          env:
+            - name: SERVER_SERVLET_CONTEXT_PATH
+              value: "/tp7"
+          startupProbe:
+            httpGet:
+              path: /tp7/actuator/health/readiness
+              port: 8080
+          livenessProbe:
+            httpGet:
+              path: /tp7/actuator/health/liveness
+              port: 8080
+          readinessProbe:
+            httpGet:
+              path: /tp7/actuator/health/readiness
+              port: 8080
